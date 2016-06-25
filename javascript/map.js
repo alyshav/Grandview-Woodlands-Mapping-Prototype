@@ -60,16 +60,41 @@ map = new L.Map('map', {
     layers: [mapBaseLayer, users, newUser]
 }).setView([49.275, -123.063], 15);
 
-//TODO: why does this only show up when you start to scroll in the map?
+//TODO: why does this only show up when you start to navigate the map?
 map.addControl(new L.Control.Scale());
 
-function initRegistration() {
+
+//LEGEND: http://leafletjs.com/examples/choropleth.html
+/*var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(map);*/
+
+
+
+//Add Marker functions
+function initAddMarker() {
     map.addEventListener('click', onMapClick);
     $('#map').css('cursor', 'crosshair');
     return false;
 }
 
-function cancelRegistration() {
+function cancelAddMarker() {
     newUser.clearLayers();
     $('#map').css('cursor', '');
     map.removeEventListener('click', onMapClick);
@@ -108,30 +133,32 @@ function getUsers() {
     });
 } //end getUsers
 
-function insertUser() {
+//INSERT NEW INCIDENT
+function insertReport() {
     $("#loading-mask").show();
     $("#loading").show();
-    var name = $("#name").val();
-    var email = $("#email").val();
-    var website = $("#website").val();
-    var city = $("#city").val();
-    var lat = $("#lat").val();
-    var lng = $("#lng").val();
-    if (name.length == 0) {
-        alert("Name is required!");
+    var reportType = $("#optradio").val();
+    var incidentType = $("#incidenttitle").val();
+    var reportDate = $("#incidentdate").val();
+    var incidentDescription = $("#incidentdescription").val();
+    var latitude = $("#lat").val();
+    var longitude = $("#lng").val();
+    //TODO: add more error checking
+    if (!reportType) {
+        alert("Type is required!");
         return false;
     }
-    if (email.length == 0) {
-        alert("Email is required!");
+    if (incidentType.length == 0) {
+        alert("Title is required!");
         return false;
     }
-    var dataString = 'reportDescription='+ name + '&email=' + email + '&website=' + website + '&city=' + city + '&latitude=' + lat + '&longitude=' + lng;
+    var dataString = '&reportType='+ reportType + '&incidentType=' + incidentType + '&reportDate=' + reportDate + '&incidentDescription=' + incidentDescription + '&latitude=' + latitude + '&longitude=' + longitude;
     $.ajax({
         type: "POST",
         url: "insert_user.php",
         data: dataString,
         success: function() {
-        cancelRegistration();
+        cancelAddMarker();
         users.clearLayers();
         getUsers();
         $("#loading-mask").hide();
@@ -142,58 +169,31 @@ function insertUser() {
     return false;
 }
 
-      function removeUser() {
-        var email = $("#email_remove").val();
-        var token = $("#token_remove").val();
-        if (email.length == 0) {
-          alert("Email is required!");
-          return false;
-        }
-        if (token.length == 0) {
-          alert("Token is required!");
-          return false;
-        }
-        var dataString = 'email='+ email + '&token=' + token;
-        $.ajax({
-          type: "POST",
-          url: "remove_user.php",
-          data: dataString,
-          success: function(data) {
-            //console.log(data);
-            if (data > 0) {
-              $('#removemeModal').modal('hide');
-              users.clearLayers();
-              getUsers();
-              $('#removeSuccessModal').modal('show');
-            }
-            else {
-              alert("Incorrect email or token. Please try again.");
-            }
-          }
-        });
-        return false;
-      }
 
-      function onMapClick(e) {
-        var markerLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
-        var marker = new L.Marker(markerLocation);
-        newUser.clearLayers();
-        newUser.addLayer(marker);
-        var form =  '<form id="inputform" enctype="multipart/form-data" class="well">'+
-              '<label><strong>Name:</strong> <i>marker title</i></label>'+
-              '<input type="text" class="span3" placeholder="Required" id="name" name="name" />'+
-              '<label><strong>Email:</strong> <i>never shared</i></label>'+
-              '<input type="text" class="span3" placeholder="Required" id="email" name="email" />'+
-              '<label><strong>City:</strong></label>'+
-              '<input type="text" class="span3" placeholder="Optional" id="city" name="city" />'+
-              '<label><strong>Website:</strong></label>'+
-              '<input type="text" class="span3" placeholder="Optional" id="website" name="website" value="http://" />'+
-              '<input style="display: none;" type="text" id="lat" name="lat" value="'+e.latlng.lat.toFixed(6)+'" />'+
-              '<input style="display: none;" type="text" id="lng" name="lng" value="'+e.latlng.lng.toFixed(6)+'" /><br><br>'+
-              '<div class="row-fluid">'+
-                '<div class="span6" style="text-align:center;"><button type="button" class="btn" onclick="cancelRegistration()">Cancel</button></div>'+
-                '<div class="span6" style="text-align:center;"><button type="button" class="btn btn-primary" onclick="insertUser()">Submit</button></div>'+
-              '</div>'+
-              '</form>';
-        marker.bindPopup(form).openPopup();
-      }
+//CLICK A MAP POINT WHEN ADDING A NEW MARKER
+var incidentSelection = '<label><strong>Type:</strong></label><label class="radio-inline"><input type="radio" name="optradio" id="optradio" class="required" value=1>' + reportTypeNames[0] + '</label>' +
+    '<label class="radio-inline"><input type="radio" name="optradio" value=2>' + reportTypeNames[1] + '</label>' +
+    '<label class="radio-inline"><input type="radio" name="optradio" value=3>' + reportTypeNames[2] + '</label>';
+
+var incidentTitle ='<label><strong>Title: </strong></label>'+'<input type="text" class="span3" placeholder="Required" id="incidenttitle" name="incidenttitle" />';
+
+var incidentDate = '<label><strong>Date: </strong></label>'+'<input type="date" class="span3" placeholder="Required" id="incidentdate" name="incidentdate" />';
+
+var incidentDescription = '<label><strong>Description: </strong></label>' + '<textarea placeholder="Required" id="incidentdescription" name="incidentdescription" form="incidentdescriptionfrom"></textarea>';
+
+function onMapClick(e) {
+var markerLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
+var marker = new L.Marker(markerLocation);
+newUser.clearLayers();
+newUser.addLayer(marker);
+var form =  '<form id="inputform" enctype="multipart/form-data">'+
+        incidentSelection + incidentTitle + incidentDate + incidentDescription +
+        '<input style="display: none;" type="text" id="lat" name="lat" value="'+e.latlng.lat.toFixed(6)+'" />'+
+        '<input style="display: none;" type="text" id="lng" name="lng" value="'+e.latlng.lng.toFixed(6)+'" /><br><br>'+
+        '<div class="row-fluid">'+
+        '<div class="span6" style="text-align:center;"><button type="button" class="btn" onclick="cancelAddMarker()">Cancel</button></div>'+
+        '<div class="span6" style="text-align:center;"><button type="button" class="btn btn-success" onclick="insertReport()">Submit</button></div>'+
+        '</div>'+
+        '</form>';
+    marker.bindPopup(form).openPopup();
+}

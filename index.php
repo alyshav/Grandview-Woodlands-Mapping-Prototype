@@ -48,7 +48,7 @@
         <h3>Contact us</h3>
       </div>
       <div class="modal-body">
-        <p><strong>Email:</strong> derp@gmail.com</p>
+        <p><strong>Email:</strong> development@gmail.com</p>
       </div>
       <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -56,42 +56,54 @@
     </div>
     <!-- END CONTACT MODAL -->
 
+    <!-- RESOURCES MODAL -->
+    <div class="modal hide fade" id="resourcesModal">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Resources</h3>
+      </div>
+      <div class="modal-body">
+        <p><a target="_blank" href="http://vancouver.ca/police/organization/planning-research-audit/neighbourhood-statistics.html">VPD</a></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+      </div>
+    </div>
+    <!-- END RESOURCES MODAL -->
 
+    <!-- ADD MARKER TO THE MAP INSTRUCTIONS -->
     <div class="modal hide fade" id="addmeModal">
       <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
-        <h3>Add me to the map!</h3>
+        <h3>Map an observation</h3>
       </div>
-      <div class="modal-body">
-        <p>Click on the Go! button below to get started.</p>
-        <p>Navigate to your desired location and click on the map to drop a marker and submit your information.</p>
+      <div class="modal-body">        
+        <p>Navigate to the incident or observation location with your cursor, and click on the map to drop the marker and submit your information.</p>
+        <p>Click "Add Marker" to start!</p>
       </div>
       <div class="modal-footer">
-        <a href="#" onclick="$('#addmeModal').modal('hide'); initRegistration(); return false;"class="btn btn-primary">Go!</a>
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" onclick="$('#addmeModal').modal('hide'); initAddMarker(); return false;"class="btn btn-success">Add Marker</a>
       </div>
     </div>
+    <!-- END ADD MARKER TO THE MAP INSTRUCTIONS -->
 
+    <!-- SUCCESS MODAL -->
     <div class="modal hide fade" id="insertSuccessModal">
       <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
-        <h3>Success!</h3>
+        <h3>Thank you!</h3>
       </div>
       <div class="modal-body">
-        <p>Thanks for joining the Leaflet Users Map!</p>
-        <p>You should receive an email shortly with instructions on how to edit your information.</p>
+        <p>Thanks for helping us make the Grandview-Woodland area a better place!</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
       </div>
     </div>
+    <!-- END SUCCESS MODAL -->
 
-    <div class="modal hide fade" id="removeSuccessModal">
-      <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>You have been removed</h3>
-      </div>
-      <div class="modal-body">
-        <p>You have been removed from the Leaflet User Map.</p>
-        <p>Thanks for your interest and feel free to add youself back at any time.</p>
-      </div>
-    </div>
+
 
     <div id="map"></div>
 

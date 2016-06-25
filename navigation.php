@@ -13,7 +13,7 @@
               <div class="nav-collapse">
                 <ul class="nav">
                   <li><a href="#" onclick="$('#aboutModal').modal('show'); return false;"> About </a></li>
-                  <li><a href="#" onclick="$('#visualizationModal').modal('show'); return false;"> Visualization </a></li>              
+                  <li><a href="#" onclick="$('#visualizationModal').modal('show'); return false;"> Reports </a></li>              
                   <li><a href="#" onclick="$('#resourcesModal').modal('show'); return false;"> Resources </a></li>
                   <li><a href="#" onclick="$('#contactModal').modal('show'); return false;"> Contact </a></li>
                 </ul>
