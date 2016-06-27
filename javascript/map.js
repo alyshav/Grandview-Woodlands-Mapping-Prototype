@@ -135,15 +135,17 @@ function getUsers() {
 
 //INSERT NEW INCIDENT
 function insertReport() {
-    $("#loading-mask").show();
-    $("#loading").show();
-    var reportType = $("#optradio").val();
+    //$("#loading-mask").show();
+    //$("#loading").show();
+
+    var reportType = ($('input[name=optradio]:checked').val());
     var incidentType = $("#incidenttitle").val();
     var reportDate = $("#incidentdate").val();
     var incidentDescription = $("#incidentdescription").val();
     var latitude = $("#lat").val();
     var longitude = $("#lng").val();
-    //TODO: add more error checking
+
+    //*******TODO: add more error checking*******
     if (!reportType) {
         alert("Type is required!");
         return false;
@@ -171,9 +173,9 @@ function insertReport() {
 
 
 //CLICK A MAP POINT WHEN ADDING A NEW MARKER
-var incidentSelection = '<label><strong>Type:</strong></label><label class="radio-inline"><input type="radio" name="optradio" id="optradio" class="required" value=1>' + reportTypeNames[0] + '</label>' +
-    '<label class="radio-inline"><input type="radio" name="optradio" value=2>' + reportTypeNames[1] + '</label>' +
-    '<label class="radio-inline"><input type="radio" name="optradio" value=3>' + reportTypeNames[2] + '</label>';
+var incidentSelection = '<label><strong>Type:</strong></label><label class="radio-inline"><input type="radio" name="optradio" id="optradio1" class="required" value=1>' + reportTypeNames[0] + '</label>' +
+    '<label class="radio-inline"><input type="radio" name="optradio" id="optradio2" value=2>' + reportTypeNames[1] + '</label>' +
+    '<label class="radio-inline"><input type="radio" name="optradio" id="optradio3" value=3>' + reportTypeNames[2] + '</label>';
 
 var incidentTitle ='<label><strong>Title: </strong></label>'+'<input type="text" class="span3" placeholder="Required" id="incidenttitle" name="incidenttitle" />';
 
